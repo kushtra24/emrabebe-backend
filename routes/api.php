@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
-use App\Models\User;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,45 +22,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // register
-// TODO: make the registration real
 Route::post('register', function(Request $request) {
     return response()->json($request, 201);
 });
 
 //login
-Route::post('login', [AuthController::class, 'register']);
+Route::post('/login', AuthController::class);
 
-/*function(Request $request) {
-    $credentials = $request->only('email', 'password');
+Route::post('/forgot', [ForgotPasswordController::class, 'forgot']);
+Route::post('/reset', [ResetPasswordController::class, 'reset']);
 
-    if(!auth()->attempt($credentials)){
-        throw ValidationException::withMessages([
-            'email' => 'Invalid credentials'
-        ]);
-    }
-    Log::info(var_export('here', true));
-    $request->session()->regenerate();
-
-    return response()->json(null, 201);
-}*/
 // log out
+Route::post('logout', [AuthController::class, 'logout']);
 
-Route::post('logout', function(Request $request) {
-    auth()->guard('web')->logout();
-
-    $request->session()->invalidate();
-
-    $request->session()->regenerateToken();
-
-    return response()->json(null, 200);
-});
-
-Route::get('articles', 'ArticleController@index');
-Route::post('articles', 'ArticleController@store');
-Route::put('articles/{id}', 'ArticleController@update');
-Route::delete('articles/{id}', 'ArticleController@destroy');
+//Route::get('articles', 'ArticleController@index');
+//Route::post('articles', 'ArticleController@store');
+//Route::put('articles/{id}', 'ArticleController@update');
+//Route::delete('articles/{id}', 'ArticleController@destroy');
 
 
-Route::get('articles', [ArticleController::class, 'index']);
-Route::get('article/{slug}', [ArticleController::class, 'show']);
-Route::put('articles/{id}', [ArticleController::class, 'update']);
+//Route::get('articles', [ArticleController::class, 'index']);
+//Route::get('article/{slug}', [ArticleController::class, 'show']);
+//Route::put('articles/{id}', [ArticleController::class, 'update']);
