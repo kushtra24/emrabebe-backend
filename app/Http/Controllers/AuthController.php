@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -28,6 +28,32 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return response()->json(null, 201);
+    }
+
+    public function register(Request $request) {
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+        if ($request->password != $request->retypePassword) {
+            return response()->json([
+                'message' => 'password confirmation is wrong',
+                'status_code' => 422
+            ], 422);
+        }
+
+        $user = new User();
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->password = bcrypt($request['password']);
+        $user->role = 'user';
+        $user->save();
+
+        event(new Registered($user));
+
+        return response()->json(null, 200);
     }
 
     public function logout(Request $request) {

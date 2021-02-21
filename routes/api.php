@@ -6,6 +6,7 @@ use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,18 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// register
-Route::post('register', function(Request $request) {
-    return response()->json($request, 201);
-});
-
-//login
+//Auth
 Route::post('/login', AuthController::class);
-
+Route::post('register', [AuthController::class, 'register']);
 Route::post('/forgot', [ForgotPasswordController::class, 'forgot']);
 Route::post('/reset', [ResetPasswordController::class, 'reset']);
-
-// log out
 Route::post('logout', [AuthController::class, 'logout']);
 
 //Route::get('articles', 'ArticleController@index');

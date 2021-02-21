@@ -15,8 +15,6 @@ class resetPasswordController extends Controller
                 'verification_code' => 'required',
                 'password' => 'required|confirmed|min:6'
             ]);
-
-            Log::info($request->email);
             $user = User::where('email', $request->email)->where('verification_code', $request->verification_code)->first();
             if(!$user) {
                 return response()->json([
@@ -24,10 +22,8 @@ class resetPasswordController extends Controller
                    'status_code' => 401
                 ], 401);
             } else {
-
                 $user->password = bcrypt(trim($request->password));
                 $user->verification_code = null;
-
                 if ($user->save()) {
                    return response()->json([
                       'message' => 'password changed successfully',
