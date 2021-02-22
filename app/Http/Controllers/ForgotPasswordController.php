@@ -29,10 +29,10 @@ class ForgotPasswordController extends Controller
                     'full_name' => $user->name,
                     'random' => $random
                 );
-//                Mail::send( 'emails.reset_password', $userData, function ($message) use ($userData) {
-//                    $message->from('info@email.com', 'User Name');
-//                    $message->to($userData['email'], $userData['full_name']);
-//                });
+                Mail::send( 'emails.reset_password', $userData, function ($message) use ($userData) {
+                    $message->from('info@email.com', 'User Name');
+                    $message->to($userData['email'], $userData['full_name']);
+                });
                 if (Mail::failures()) {
                     return response()->json([
                         'message' => 'Some error occurred, Please try again',
