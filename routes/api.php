@@ -31,14 +31,10 @@ Route::post('/reset', [ResetPasswordController::class, 'reset']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 // Users
-Route::middleware('auth:sanctum')->get('users', [UserController::class, 'index']);
-
-//Route::get('articles', 'ArticleController@index');
-//Route::post('articles', 'ArticleController@store');
-//Route::put('articles/{id}', 'ArticleController@update');
-//Route::delete('articles/{id}', 'ArticleController@destroy');
-
-
-//Route::get('articles', [ArticleController::class, 'index']);
-//Route::get('article/{slug}', [ArticleController::class, 'show']);
-//Route::put('articles/{id}', [ArticleController::class, 'update']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+//    Route::post('/users', [UserController::class, 'store']);
+//    Route::put('/users/{id}', [UserController::class, 'update']);
+//    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+});
