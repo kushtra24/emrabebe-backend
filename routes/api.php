@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BabyNamesController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +35,13 @@ Route::post('logout', [AuthController::class, 'logout']);
 
 // Users
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/baby-names', [BabyNamesController::class, 'index']);
+    Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/messages', [MessagesController::class, 'index']);
+
     Route::get('/users/{id}', [UserController::class, 'show']);
 //    Route::post('/users', [UserController::class, 'store']);
 //    Route::put('/users/{id}', [UserController::class, 'update']);
