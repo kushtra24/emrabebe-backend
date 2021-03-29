@@ -2,6 +2,7 @@
   <dictionary name="Kushtrim">
     <words>
       <w>csrf</w>
+      <w>fillable</w>
     </words>
   </dictionary>
 </component>

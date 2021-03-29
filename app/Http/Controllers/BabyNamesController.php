@@ -28,33 +28,20 @@ class BabyNamesController extends Controller
      */
     public function store(Request $request)
     {
-
-        $name = new Name;
-
-        $name->name = $request['name'];
-        $name->origin = $request['origin'];
-
-
-        $name->description = $request['description'];
-        $name->gender = $request['gender'];
-        $name->meaning = $request['meaning'];
-
-        $name->save();
-
-//        $name = Name::create($request->all());
-
-        return response()->json($name, 201);
+        $article = BabyName::create($request->all());
+        return response()->json($article, 200);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        //
+        $babyName = BabyName::findOrFail($id);
+        return response()->json($babyName, 200);
     }
 
 

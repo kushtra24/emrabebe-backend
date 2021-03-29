@@ -19,36 +19,29 @@ class MessagesController extends Controller
         return response()->json($messages, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $messages = Message::create($request->all());
+        return response()->json($messages, 200);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Message  $messages
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Message $messages)
+    public function show($id)
     {
-        //
+        $message = Message::findOrFail($id);
+        return response()->json($message, 200);
     }
 
     /**

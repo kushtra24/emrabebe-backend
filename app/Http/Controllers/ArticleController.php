@@ -104,41 +104,11 @@ class ArticleController extends Controller {
      */
     public function store(Request $request) {
 
-        // check if is admin or author
-        if (!Gate::allows('isAdmin') || !Gate::allows('isAuthor')) {
-            // return access denied
-            throw new \InvalidArgumentException('You do not have enough privileges to save an article', 401);
-        }
-
-        // validate the request
-        $this->validate($request, $this->rules);
-
-        // get authenticated user my Id
-        $AuthenticatedUser = Auth::id();
-
-        // get the slug from the request
-        $slug = $request['slug'];
-        // get how many articles are posted
-        $numberOfArticles = Article::count();
-        // check if slug already exists if so add and Id to the slug
-        if(Article::where('slug', '=', $slug)->exists()) {
-            // merge the number of articles +1 to the slug
-            $request->merge(['slug' => ($slug . "-" . ($numberOfArticles + 1))]);
-        }
-
-        // get the photo from the request
-        $requestedPhoto = $request['photo'];
-        // check if requested photo is not an empty string and does not contain storage in it
-        if ( $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
-            $this->updatePhoto($request, $requestedPhoto, 'article');
-        }
-        // merge the Auth in user on the request
-        $request->merge(['user_id' => $AuthenticatedUser]);
-
         // create user
         $article = Article::create($request->all());
+
         // attach categories of article
-        $article->category()->attach($request['cat']);
+//        $article->category()->attach($request['cat']);
 
         // return json response with user
         return response()->json($article, 200);
@@ -151,21 +121,21 @@ class ArticleController extends Controller {
      * @param $slug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($slug) {
+    public function show($id) {
 
         // check if slug is set
-        if (!isset($slug)) {
-            throw new \InvalidArgumentException('Bad argument: Important credential \'slug\' is in bad format.', 400);
-        }
+//        if (!isset($slug)) {
+//            throw new \InvalidArgumentException('Bad argument: Important credential \'slug\' is in bad format.', 400);
+//        }
 
         // get article from slug
-        $article = Article::where('slug', $slug)->first();
+        $article = Article::findOrFail($id);
 
         // get the category of the post and add it to the article query
-        if (isset($article->category)) {
-            $here = $article->category->pluck('id');
-            $article['cat'] = $here;
-        }
+//        if (isset($article->category)) {
+//            $here = $article->category->pluck('id');
+//            $article['cat'] = $here;
+//        }
 
         return response()->json($article, 200);
     }
@@ -237,4 +207,3 @@ class ArticleController extends Controller {
     }
 }
 
- 

@@ -20,35 +20,27 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $categories = Category::create($request->all());
+        return response()->json($categories, 200);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Category $category)
+    public function show($id)
     {
-        //
+        $categories = Category::findOrFail($id);
+        return response()->json($categories, 200);
     }
 
     /**

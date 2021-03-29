@@ -26,6 +26,15 @@ class UserController extends Controller
         return response()->json($users, 200);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request) {
+        $user = User::create($request->all());
+        return response()->json($user, 200);
+    }
+
     public function show($id) {
 
         // check if slug is set

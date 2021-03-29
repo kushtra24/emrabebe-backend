@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class BabyName extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'origin', 'description', 'gender_id', 'meaning', 'created_at'];
 }
