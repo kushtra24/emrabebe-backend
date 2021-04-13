@@ -151,28 +151,28 @@ class ArticleController extends Controller {
 //        }
 
         $article = Article::find($id);
-
-        // get authenticated user my Id
-        $AuthenticatedUser = Auth::id();
-
-        // merge the Auth in user on the request
-        $request->merge(['user_id' => '1']);
-
-        // get current uploaded photo from DB
-        $currentPhoto = $article->photo;
-        $requestedPhoto = $request['photo'];
-        // check if requested photo is not the same as the photo on the db, is not an empty string and does not contain storage in it
-        if ($requestedPhoto != $currentPhoto && $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
-            $this->updatePhoto($request, $requestedPhoto, 'article', $currentPhoto);
-        } else {
-            $request->merge(['photo' => $currentPhoto]);
-        }
+//
+//        // get authenticated user my Id
+//        $AuthenticatedUser = Auth::id();
+//
+//        // merge the Auth in user on the request
+//        $request->merge(['user_id' => '1']);
+//
+//        // get current uploaded photo from DB
+//        $currentPhoto = $article->photo;
+//        $requestedPhoto = $request['photo'];
+//        // check if requested photo is not the same as the photo on the db, is not an empty string and does not contain storage in it
+//        if ($requestedPhoto != $currentPhoto && $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
+//            $this->updatePhoto($request, $requestedPhoto, 'article', $currentPhoto);
+//        } else {
+//            $request->merge(['photo' => $currentPhoto]);
+//        }
 
         $article->update($request->all());
 
         // attach categories of article
-        $article->category()->detach();
-        $article->category()->attach($request['cat']);
+//        $article->category()->detach();
+//        $article->category()->attach($request['cat']);
 
         return response()->json('updated', 200);
     }
@@ -180,30 +180,31 @@ class ArticleController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param $slug
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($slug)
+    public function destroy($id)
     {
         // check if is admin or author
-        if (!Gate::allows('isAdmin') || !Gate::allows('isAuthor')) {
-            // return access denied
-            throw new \InvalidArgumentException('You do not have enough privileges to delete an article', 400);
-        }
+//        if (!Gate::allows('isAdmin') || !Gate::allows('isAuthor')) {
+//            // return access denied
+//            throw new \InvalidArgumentException('You do not have enough privileges to delete an article', 400);
+//        }
 
         // get the user
-        $article = Article::where('slug', $slug)->firstOrFail();
+        $article = Article::firstOrFail($id);
 
         // gelete user
         $article->delete();
 
         // delete the old photo from the storage
         // delete the old photo from the storage
-        $this->deleteStoragePhoto('article', $article->photo);
-        // attach categories of article
-        $article->category()->detach();
+//        $this->deleteStoragePhoto('article', $article->photo);
+//        // attach categories of article
+//        $article->category()->detach();
 
         return response()->json('Deleted', 200);
     }
+
 }
 

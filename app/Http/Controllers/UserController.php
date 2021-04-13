@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request) {
-
 
         $page = $request->input('page', null); // only needed to check if pagination is wanted
 
         $users = User::select('*');
-
-//        $this->filterArticleByCategory($users, $category); // filter user type
-//        $this->checkArticleSearch($users, $search); // check for search
 
         Log::info(var_export('here', true));
         $users = $this->executeQuery($users, $page); // execute the query
@@ -35,6 +35,10 @@ class UserController extends Controller
         return response()->json($user, 200);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id) {
 
         // check if slug is set
@@ -43,8 +47,30 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
-
         return response()->json($user, 200);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id) {
+
+        $article = User::find($id);
+        $article->update($request->all());
+
+        return response()->json('updated', 200);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id) {
+        $article = User::firstOrFail($id);
+        $article->delete();
+        return response()->json('Deleted', 200);
     }
 
 }

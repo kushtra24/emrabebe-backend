@@ -50,21 +50,26 @@ class BabyNamesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $article = BabyName::find($id);
+        $article->update($request->all());
+
+        return response()->json('updated', 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        $article = BabyName::firstOrFail($id);
+        $article->delete();
+        return response()->json('Deleted', 200);
     }
 }

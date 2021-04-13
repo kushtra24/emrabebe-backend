@@ -45,36 +45,30 @@ class MessagesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Message  $messages
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Message $messages)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Message  $messages
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Message $messages)
+    public function update(Request $request, $id)
     {
-        //
+        $article = Message::find($id);
+        $article->update($request->all());
+
+        return response()->json('updated', 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Message  $messages
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Message $messages)
+    public function destroy($id)
     {
-        //
+        $article = Message::firstOrFail($id);
+        $article->delete();
+        return response()->json('Deleted', 200);
     }
 }
