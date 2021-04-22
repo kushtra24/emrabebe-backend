@@ -187,7 +187,7 @@ class ArticleController extends Controller {
 //        }
 
         // get the user
-        $article = Article::firstOrFail($id);
+        $article = Article::find($id);
 
         // gelete user
         $article->delete();

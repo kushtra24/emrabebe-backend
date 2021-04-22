@@ -67,7 +67,7 @@ class BabyNamesController extends Controller
      */
     public function destroy($id)
     {
-        $article = BabyName::firstOrFail($id);
+        $article = BabyName::find($id);
         $article->delete();
         return response()->json('Deleted', 200);
     }

@@ -61,7 +61,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id) {
-        $article = User::firstOrFail($id);
+        $article = User::find($id);
         $article->delete();
         return response()->json('Deleted', 200);
     }
