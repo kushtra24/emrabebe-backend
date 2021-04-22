@@ -14,15 +14,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request) {
-
-        $page = $request->input('page', null); // only needed to check if pagination is wanted
-
         $users = User::select('*');
-
-        Log::info(var_export('here', true));
-        $users = $this->executeQuery($users, $page); // execute the query
-        Log::info(var_export('here 2', true));
-
+        $users = $this->executeQuery($users); // execute the query
         return response()->json($users, 200);
     }
 

@@ -45,23 +45,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);
-    Route::delete('/users/{id}', [UserController::class, 'delete']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     Route::post('/baby-names', [BabyNamesController::class, 'store']);
     Route::get('/baby-names/{id}', [BabyNamesController::class, 'show']);
     Route::put('/baby-names/{id}', [BabyNamesController::class, 'update']);
-    Route::delete('/baby-names/{id}', [BabyNamesController::class, 'delete']);
+    Route::delete('/baby-names/{id}', [BabyNamesController::class, 'destroy']);
 
     Route::post('/articles', [ArticleController::class, 'store']);
     Route::get('/articles/{id}', [ArticleController::class, 'show']);
     Route::put('/articles/{id}', [ArticleController::class, 'update']);
-    Route::delete('/articles/{id}', [ArticleController::class, 'delete']);
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);
-    Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
     Route::get('/messages', [MessagesController::class, 'index']);
     Route::post('/messages', [MessagesController::class, 'store']);

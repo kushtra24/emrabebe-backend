@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BabyName;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BabyNamesController extends Controller
 {
@@ -12,11 +13,9 @@ class BabyNamesController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
-    {
-        $name = BabyName::all();
-        // select * from names;
-        return response()->json($name, 200);
+    public function index() {
+        $names = BabyName::all();
+        return response()->json($names, 200);
     }
 
 

@@ -66,7 +66,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $article = Category::firstOrFail($id);
+        $article = Category::find($id);
         $article->delete();
         return response()->json('Deleted', 200);
     }
