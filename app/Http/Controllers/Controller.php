@@ -37,6 +37,14 @@ class Controller extends BaseController
         return null;
     }
 
+    /**
+     * @param null $query
+     * @param null $page
+     * @param null $limit
+     * @param null $orderByArr
+     * @param string $orderType
+     * @return |null
+     */
     protected function executeQuery(&$query = null, $page = null, $limit = null, $orderByArr = null, $orderType = 'asc') {
         $result = null;
         if(!isset($query)) { return null; }
@@ -61,7 +69,7 @@ class Controller extends BaseController
         // check for pagination
         if(isset($page) && $page > 0) {
             // check limit
-            if(!isset($limit) || $limit <= 0) { $limit = 8; }
+            if(!isset($limit) || $limit <= 0) { $limit = 10; }
             // execute
             $result = $query->paginate($limit);
         } else {
@@ -76,5 +84,5 @@ class Controller extends BaseController
 
         return $result;
     }
-    
+
 }

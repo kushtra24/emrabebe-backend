@@ -11,11 +11,64 @@ class BabyNamesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index() {
-        $names = BabyName::all();
+    public function index(Request $request) {
+
+        $page = $request->input('current_page', null);
+        $limit = $request->input('limit', null);
+        $gender = $request->input('gender', null);
+        $char = $request->input('char', null);
+        $origin = $request->input('origin', null);
+
+        $names = BabyName::select('*');
+
+        $this->filterByGender($names, $gender);
+        $this->filterByChar($names, $char);
+        $this->filterByOrigin($names, $origin);
+
+        $names = $this->executeQuery($names, $page, $limit);
+
         return response()->json($names, 200);
+    }
+
+
+    /**
+     * @param $query
+     * @param $origin
+     * @return mixed
+     */
+    public function filterByOrigin(&$query, $origin) {
+        if (!isset($query)) { return $query; }
+        if (!is_null($origin)) {
+            $query = $query->where('origin_id', $origin);
+        }
+    }
+
+    /**
+     * @param $query
+     * @param $char
+     * @return mixed
+     */
+    public function filterByChar(&$query, $char) {
+        if (!isset($query)) { return $query; }
+        if (!is_null($char)) {
+            $query = $query->where('name', 'LIKE', $char.'%');
+        }
+    }
+
+
+    /**
+     * @param $query
+     * @param $gender
+     * @return mixed
+     */
+    public function filterByGender(&$query, $gender) {
+        if (!isset($query)) { return $query; }
+        if (!is_null($gender)) {
+           $query = $query->where('gender_id', $gender);
+        }
     }
 
 

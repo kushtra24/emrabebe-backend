@@ -10,8 +10,20 @@ class BabyName extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'origin', 'description', 'gender_id', 'meaning', 'created_at'];
+    protected $fillable = ['name', 'origin_id', 'description', 'gender_id', 'meaning', 'created_at'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Origin::class);
+    }
+
+    /**
+     * @param $date
+     * @return string
+     */
     public function getCreatedAtAttribute($date)
     {
         return Carbon::parse($date)->format('d.m.Y');

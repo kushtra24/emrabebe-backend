@@ -24,7 +24,7 @@ class BabyNameFactory extends Factory
     {
         return [
             'name' => $this->faker->firstName(),
-            'origin' => $this->faker->country,
+            'origin_id' => $this->faker->numberBetween(1, 100),
             'description' => $this->faker->paragraph(4),
             'meaning' => $this->faker->paragraph(2),
             'gender_id' => $this->faker->boolean,
