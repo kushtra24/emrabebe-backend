@@ -17,7 +17,7 @@ class BabyNamesController extends Controller
     public function index(Request $request) {
 
         $page = $request->input('current_page', null);
-        $limit = $request->input('limit', null);
+        $limit = $request->input('limit', 5);
         $gender = $request->input('gender', null);
         $char = $request->input('char', null);
         $origin = $request->input('origin', null);

@@ -67,7 +67,7 @@ class MessagesController extends Controller
      */
     public function destroy($id)
     {
-        $article = Message::firstOrFail($id);
+        $article = Message::findOrFail($id);
         $article->delete();
         return response()->json('Deleted', 200);
     }
