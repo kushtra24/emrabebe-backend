@@ -25,7 +25,6 @@ class CategoryFactory extends Factory
         return [
             'title' => $this->faker->firstName(),
             'description' => $this->faker->paragraph(4),
-            'article_id' => $this->faker->numberBetween(1-20),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')
         ];
     }
