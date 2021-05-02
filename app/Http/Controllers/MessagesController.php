@@ -10,11 +10,19 @@ class MessagesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $messages = Message::all();
+
+        $page = $request->input('page');
+
+        $limit = $request->input('limit', 5);
+        $orderType = $request->input('sort', 'desc');
+        $messages = Message::select('*');
+
+        $messages = $this->executeQuery($messages, $page, $limit, $orderType); // execute the query
 
         return response()->json($messages, 200);
     }

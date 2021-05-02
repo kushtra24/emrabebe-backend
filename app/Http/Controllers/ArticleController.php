@@ -29,20 +29,17 @@ class ArticleController extends Controller {
      */
     public function index(Request $request) {
 
-//        $page = $request->input('page', null); // only needed to check if pagination is wanted
-//        $limit = $request->input('limit', null);
-//        $search = $request->input('search');
-//        $category = $request->input('cat', null);
-//        $orderType = $request->input('order-type', 'desc'); // order type
-//        $orderByArr = $request->input('order-by', 'created_at'); // default order
-//        $orderByArr = $this->stringToArray($orderByArr); // to array
+        $page = $request->input('page');
+        $limit = $request->input('limit', 5);
+        $orderType = $request->input('sort', 'desc');
+        $orderByArr = $request->input('sortBy', 'id');
 
         $articles = Article::select('*');
-
+//
 //        $this->filterArticleByCategory($articles, $category); // filter user type
 //        $this->checkArticleSearch($articles, $search); // check for search
 
-        $articles = $this->executeQuery($articles); // execute the query
+        $articles = $this->executeQuery($articles, $page, $limit, $orderType); // execute the query
 
         return response()->json($articles, 200);
     }

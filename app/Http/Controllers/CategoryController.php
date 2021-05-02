@@ -12,9 +12,16 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $page = $request->input('page');
+        $limit = $request->input('limit', 5);
+        $orderType = $request->input('sort', 'desc');
+
+        $categories = Category::select('*');
+
+        $categories = $this->executeQuery($categories, $page, $limit, $orderType); // execute the query
+
 
         return response()->json($categories, 200);
     }

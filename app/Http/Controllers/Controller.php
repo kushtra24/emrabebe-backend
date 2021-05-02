@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
@@ -45,26 +46,27 @@ class Controller extends BaseController
      * @param string $orderType
      * @return |null
      */
-    protected function executeQuery(&$query = null, $page = null, $limit = null, $orderByArr = null, $orderType = 'asc') {
+    protected function executeQuery(&$query = null, $page = null, $limit = null, $orderType = 'asc', $orderByArr = null) {
         $result = null;
         if(!isset($query)) { return null; }
 
-//        Log::info('HERE: ' . var_export($query, true));
-
         // order by array
-        if(is_countable($orderByArr) && count($orderByArr) > 0) {
+//        if(is_countable($orderByArr) && count($orderByArr) > 0) {
             // check sort ranking
             if(!isset($orderType) || $orderType !== 'desc' && $orderType !== 'asc') {
                 $orderType = 'asc';
             }
+            else {
+                $query = $query->orderBy('id', $orderType);
+            }
 
             // create order by
-            for($i = 0, $max = count($orderByArr); $i < $max; $i++) {
-                $attr = $orderByArr[$i];
-                if(!isset($attr)) { continue; }
-                $query = $query->orderBy($attr, $orderType);
-            }
-        }
+//            for($i = 0, $max = count($orderByArr); $i < $max; $i++) {
+//                $attr = $orderByArr[$i];
+//                if(!isset($attr)) { continue; }
+//                $query = $query->orderBy($attr, $orderType);
+//            }
+//        }
 
         // check for pagination
         if(isset($page) && $page > 0) {

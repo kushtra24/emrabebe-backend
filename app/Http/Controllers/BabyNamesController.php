@@ -16,8 +16,11 @@ class BabyNamesController extends Controller
      */
     public function index(Request $request) {
 
-        $page = $request->input('current_page', null);
+
+        $page = $request->input('page');
         $limit = $request->input('limit', 5);
+        $orderType = $request->input('sort', 'desc');
+        $orderByArr = $request->input('sortBy', 'id');
         $gender = $request->input('gender', null);
         $char = $request->input('char', null);
         $origin = $request->input('origin', null);
@@ -28,7 +31,7 @@ class BabyNamesController extends Controller
         $this->filterByChar($names, $char);
         $this->filterByOrigin($names, $origin);
 
-        $names = $this->executeQuery($names, $page, $limit);
+        $names = $this->executeQuery($names, $page, $limit, $orderType);
 
         return response()->json($names, 200);
     }

@@ -14,8 +14,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request) {
+
+        $page = $request->input('page');
+        $limit = $request->input('limit', 5);
+        $orderType = $request->input('sort', 'desc');
+        $orderByArr = $request->input('sortBy', 'id');
+
         $users = User::select('*');
-        $users = $this->executeQuery($users); // execute the query
+
+        $users = $this->executeQuery($users, $page, $limit, $orderType); // execute the query
+
+
         return response()->json($users, 200);
     }
 
