@@ -10,7 +10,21 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'is_public', 'created_at'];
+    protected $fillable = ['title', 'slug', 'content', 'is_public', 'user_id'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['categories', 'user_id'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function category() {
+        return $this->belongsToMany(Category::class, 'article_category');
+    }
 
     public function getCreatedAtAttribute($date)
     {

@@ -87,4 +87,43 @@ class Controller extends BaseController
         return $result;
     }
 
+    /**
+     * Clean array by given $removeValue
+     * and simple trim values if possible
+     *
+     * @param $array
+     * @param null $removeValue
+     * @param null $exceptionsArr
+     * @return array
+     */
+    protected function cleanArray($array, $removeValue = null, $exceptionsArr = null){
+        if(!is_countable($array)) { return $array; }
+
+        if(is_null($removeValue)) {
+            return array_filter($array, function($value, $key) use(&$array, $exceptionsArr) {
+                if(gettype($value) === 'string') {
+                    // trim value
+                    $array[$key] = trim($value);
+                }
+                //check if key is in exception
+                if(!is_null($exceptionsArr) && array_search($key, $exceptionsArr) !== false) { return true; }
+                // check if value is not NULL and set and not an empty string
+                return !(is_null($value) || !isset($value) || (gettype($value) === 'string' && trim($value) === ''));
+
+            }, ARRAY_FILTER_USE_BOTH);
+        }
+
+        return array_filter($array, function($value, $key) use (&$array, $removeValue, $exceptionsArr) {
+            if(gettype($value) === 'string') {
+                // trim value
+                $array[$key] = trim($value);
+            }
+            //check if key is in exception
+            if(!is_null($exceptionsArr) && array_search($key, $exceptionsArr) !== false) { return true; } // in exception
+            // check if value is NOT remove value
+            return $value !== $removeValue;
+
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
 }

@@ -10,18 +10,16 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $page = $request->input('page');
-        $limit = $request->input('limit', 5);
+        $limit = $request->input('limit', null);
         $orderType = $request->input('sort', 'desc');
 
         $categories = Category::select('*');
-
         $categories = $this->executeQuery($categories, $page, $limit, $orderType); // execute the query
-
 
         return response()->json($categories, 200);
     }
@@ -32,8 +30,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $categories = Category::create($request->all());
         return response()->json($categories, 200);
     }

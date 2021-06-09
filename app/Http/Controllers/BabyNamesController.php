@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BabyName;
+use App\Models\Origin;
+use App\Models\SuggestName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -25,13 +27,15 @@ class BabyNamesController extends Controller
         $char = $request->input('char', null);
         $origin = $request->input('origin', null);
 
-        $names = BabyName::select('*');
+        $names = BabyName::select('id','name', 'origin_id', 'description', 'created_at');
 
         $this->filterByGender($names, $gender);
         $this->filterByChar($names, $char);
         $this->filterByOrigin($names, $origin);
 
         $names = $this->executeQuery($names, $page, $limit, $orderType);
+
+        $this->getOriginIds($names);
 
         return response()->json($names, 200);
     }
@@ -127,4 +131,25 @@ class BabyNamesController extends Controller
         $article->delete();
         return response()->json('Deleted', 200);
     }
+
+
+    /**
+     * get contract information from other models depending on the id
+     * @param $query
+     */
+    public function getOriginIds($query) {
+        // get the get data from Person depending on the id on the contract
+        if (isset($query) && is_countable($query)) {
+            foreach ($query as &$entity) {
+                if (!isset($entity)) { continue; }
+                // get data
+                $origin = Origin::find($entity['origin_id']);
+                // check if has data and get the customer name
+                if (isset($origin)) {
+                    // build a new json object and assign origin->name to it
+                    $entity['origin'] = $origin->name;
+                }
+            }
+        }
+    } //end getDataForIds
 }

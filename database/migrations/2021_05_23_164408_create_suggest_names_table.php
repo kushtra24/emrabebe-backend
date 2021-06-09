@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryArticleTable extends Migration
+class CreateSuggestNamesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateCategoryArticleTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_article', function (Blueprint $table) {
+        Schema::create('suggest_names', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id');
-            $table->integer('article_id');
+            $table->string('name');
+            $table->boolean('gender');
+            $table->string('meaning');
+            $table->text('origin');
+            $table->boolean('approved')->default(false);
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateCategoryArticleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_article');
+        Schema::dropIfExists('suggest_names');
     }
 }

@@ -10,6 +10,8 @@ class Origin extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['slug', 'name', 'name_de', 'name_en', 'native', 'active'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

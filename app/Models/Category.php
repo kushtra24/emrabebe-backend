@@ -12,6 +12,13 @@ class Category extends Model
 
     protected $fillable = ['title', 'description', 'article_id', 'created_at'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function article() {
+        return $this->belongsToMany(Article::class, 'article_category');
+    }
+
     public function getCreatedAtAttribute($date)
     {
         return Carbon::parse($date)->format('d.m.Y');

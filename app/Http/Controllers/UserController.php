@@ -24,7 +24,6 @@ class UserController extends Controller
 
         $users = $this->executeQuery($users, $page, $limit, $orderType); // execute the query
 
-
         return response()->json($users, 200);
     }
 

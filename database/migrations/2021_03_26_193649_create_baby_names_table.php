@@ -17,9 +17,9 @@ class CreateBabyNamesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('origin_id');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('gender_id');
-            $table->string('meaning');
+            $table->string('meaning')->nullable();
             $table->timestamps();
         });
     }
