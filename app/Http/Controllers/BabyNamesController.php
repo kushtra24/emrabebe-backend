@@ -27,7 +27,7 @@ class BabyNamesController extends Controller
         $char = $request->input('char', null);
         $origin = $request->input('origin', null);
 
-        $names = BabyName::select('id','name', 'origin_id', 'description', 'created_at');
+        $names = BabyName::select('id','name', 'origin_id', 'description', 'meaning', 'created_at');
 
         $this->filterByGender($names, $gender);
         $this->filterByChar($names, $char);
@@ -100,6 +100,9 @@ class BabyNamesController extends Controller
     public function show($id)
     {
         $babyName = BabyName::findOrFail($id);
+        $here = $babyName->origin->name;
+        $babyName['origin'] = $here;
+
         return response()->json($babyName, 200);
     }
 

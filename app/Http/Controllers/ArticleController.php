@@ -33,17 +33,34 @@ class ArticleController extends Controller {
 
         $page = $request->input('page');
         $limit = $request->input('limit', 5);
+        $category_id = $request->input('cat_id');
         $orderType = $request->input('sort', 'desc');
         $orderByArr = $request->input('sortBy', 'id');
 
+//        $articles = new Article;
         $articles = Article::select('*');
 
-//        $this->filterArticleByCategory($articles, $category); // filter user type
+        if(isset($category_id)) {
+            $this->filterArticleByCategory($articles, $category_id);
+//            $orderByArr = 'title';
+        }
 //        $this->checkArticleSearch($articles, $search); // check for search
 
-        $articles = $this->executeQuery($articles, $page, $limit, $orderType); // execute the query
+        $articles = $this->executeQuery($articles, $page, $limit, $orderType, $orderByArr); // execute the query
+
+        foreach($articles as $article) {
+            if (isset($article)) {
+                $article['categories'] = $article->category;
+            }
+        }
+
+        return response()->json($articles,200);
+    }
 
 
+    public function randomArticles() {
+
+        $articles = Article::all()->random(4);
 
         return response()->json($articles,200);
     }
@@ -76,22 +93,29 @@ class ArticleController extends Controller {
     /**
      * check contract type
      * @param $query
-     * @param $cat
+     * @param $category_id
      * @return mixed
      */
-    private function filterArticleByCategory(&$query, $cat) {
+    private function filterArticleByCategory(&$query, $category_id) {
+
         $this->checkIfQueryIsNotSet($query);
 
-        if (!is_null($cat)) {
-            //join Article with category_article and get category_article.category_id
-            $query = $query->join('category_article', 'articles.id', '=', 'category_article.article_id');
-            $query = $query->where('category_id', $cat);
+        if (!is_null($category_id)) {
+            $query = $query->whereIn('articles.id', Article::select('article_id')->from('article_category')->where('category_id', $category_id ));
         }
     }
+
+//SELECT * FROM articles
+//WHERE id IN
+//(SELECT articleID FROM catart WHERE categoryID = 1)
+//ORDER BY id;
+
+
 
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request) {
 
@@ -110,11 +134,11 @@ class ArticleController extends Controller {
         }
 
         // get the photo from the request
-//        $requestedPhoto = $request['photo'];
+        $requestedPhoto = $request['photo'];
         // check if requested photo is not an empty string and does not contain storage in it
-//        if ( $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
-//            $this->updatePhoto($request, $requestedPhoto, 'article');
-//        }
+        if ( $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
+            $this->updatePhoto($request, $requestedPhoto, 'article');
+        }
 
         // merge the Auth in user on the request
         $request->merge(['user_id' => auth()->user()->id]);
@@ -177,15 +201,15 @@ class ArticleController extends Controller {
             $request->merge(['slug' => ($slug . "-" . ($numberOfArticles))]);
         }
 
-        // get current uploaded photo from DB
-//        $currentPhoto = $article->photo;
-//        $requestedPhoto = $request['photo'];
-//        // check if requested photo is not the same as the photo on the db, is not an empty string and does not contain storage in it
-//        if ($requestedPhoto != $currentPhoto && $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
-//            $this->updatePhoto($request, $requestedPhoto, 'article', $currentPhoto);
-//        } else {
-//            $request->merge(['photo' => $currentPhoto]);
-//        }
+//         get current uploaded photo from DB
+        $currentPhoto = $article->photo;
+        $requestedPhoto = $request['photo'];
+        // check if requested photo is not the same as the photo on the db, is not an empty string and does not contain storage in it
+        if ($requestedPhoto != $currentPhoto && $requestedPhoto != '' && !Str::contains($requestedPhoto, 'storage') ) {
+            $this->updatePhoto($request, $requestedPhoto, 'article', $currentPhoto);
+        } else {
+            $request->merge(['photo' => $currentPhoto]);
+        }
 
         $article->update($request->all());
 

@@ -10,7 +10,7 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'content', 'is_public', 'user_id'];
+    protected $fillable = ['title', 'slug', 'content', 'is_public', 'user_id', 'photo'];
 
     /**
      * The attributes that should be hidden for arrays.

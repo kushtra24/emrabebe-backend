@@ -15,7 +15,7 @@ class Origin extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function origin() {
+    public function babyNames() {
         return $this->hasMany(BabyName::class);
     }
 

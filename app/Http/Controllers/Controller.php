@@ -7,6 +7,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Controller extends BaseController
 {
@@ -46,19 +48,19 @@ class Controller extends BaseController
      * @param string $orderType
      * @return |null
      */
-    protected function executeQuery(&$query = null, $page = null, $limit = null, $orderType = 'asc', $orderByArr = null) {
+    protected function executeQuery(&$query = null, $page = null, $limit = null, $orderType = 'asc', $orderByArr = 'id') {
         $result = null;
         if(!isset($query)) { return null; }
 
         // order by array
 //        if(is_countable($orderByArr) && count($orderByArr) > 0) {
             // check sort ranking
-            if(!isset($orderType) || $orderType !== 'desc' && $orderType !== 'asc') {
-                $orderType = 'asc';
-            }
-            else {
-                $query = $query->orderBy('id', $orderType);
-            }
+//            if(!isset($orderType) || $orderType !== 'desc' && $orderType !== 'asc') {
+//                $orderType = 'asc';
+//            }
+//            else {
+                $query = $query->orderBy($orderByArr, $orderType);
+//            }
 
             // create order by
 //            for($i = 0, $max = count($orderByArr); $i < $max; $i++) {
@@ -126,4 +128,48 @@ class Controller extends BaseController
         }, ARRAY_FILTER_USE_BOTH);
     }
 
+    /**
+     * update base64 photos and store them
+     * @param $request
+     * @param $requestedPhoto
+     * @param $storagePath
+     * @param string $currentPhoto
+     */
+    public function updatePhoto(&$request, $requestedPhoto, $storagePath, $currentPhoto = '') {
+        $image_64 = $requestedPhoto;  // your base64 encoded
+        $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+        $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+        // find substring fro replace here eg: data:image/png;base64,
+        $image = str_replace($replace, '', $image_64);
+        $image = str_replace(' ', '+', $image);
+        $imageName = Str::random(10) . '.' . $extension;
+        Storage::disk($storagePath)->put($imageName, base64_decode($image));
+        $request->merge(['photo' => $imageName]);
+        // delete the old photo from the storage
+        $this->deleteStoragePhoto($storagePath, $currentPhoto);
+    }
+
+    /**
+     * delete current storage photo
+     * @param $storagePath
+     * @param string $currentPhoto
+     */
+    public function deleteStoragePhoto($storagePath, $currentPhoto = '') {
+        $currentDBPhoto = storage_path('app/public/' . $storagePath . "/").$currentPhoto;
+        if (file_exists($currentDBPhoto)) {
+            @unlink($currentDBPhoto);
+        }
+    }
+
+    /**
+     * check if query is set
+     * @param $query
+     * @return mixed
+     */
+    public function checkIfQueryIsNotSet($query) {
+        if (!isset($query)) { return null; }
+    }
+
 }
+
+

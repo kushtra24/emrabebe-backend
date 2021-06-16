@@ -19,7 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('slug')->unique();
             $table->text('content');
             $table->integer('user_id');
-        //    $table->string('photo')->nullable()->default('defaultArticle.png');
+            $table->string('photo')->nullable()->default('defaultArticle.png');
             $table->tinyInteger('is_public')->nullable()->default(1);
             $table->timestamps();
         });

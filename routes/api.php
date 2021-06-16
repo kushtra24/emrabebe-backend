@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/origins', [OriginController::class, 'index']);
     Route::get('/baby-names', [BabyNamesController::class, 'index']);
     Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/random-articles', [ArticleController::class, 'randomArticles']);
+    Route::get('/categories', [CategoryController::class, 'index']);
 
     Route::post('/suggest-names', [SuggestNameController::class, 'store']);
     Route::post('/messages', [MessagesController::class, 'store']);
@@ -60,7 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/articles/{id}', [ArticleController::class, 'update']);
     Route::delete('/articles/{slug}', [ArticleController::class, 'destroy']);
 
-    Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);

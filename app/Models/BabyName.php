@@ -13,9 +13,17 @@ class BabyName extends Model
     protected $fillable = ['name', 'origin_id', 'description', 'gender_id', 'meaning', 'created_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function post()
+    {
+        return $this->belongsToMany(Origin::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function origin()
     {
         return $this->belongsTo(Origin::class);
     }
