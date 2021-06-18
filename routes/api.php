@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/origins', [OriginController::class, 'index']);
     Route::get('/baby-names', [BabyNamesController::class, 'index']);
     Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/articles/{slug}', [ArticleController::class, 'show']);
     Route::get('/random-articles', [ArticleController::class, 'randomArticles']);
     Route::get('/categories', [CategoryController::class, 'index']);
 
@@ -58,7 +59,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/baby-names/{id}', [BabyNamesController::class, 'destroy']);
 
     Route::post('/articles', [ArticleController::class, 'store']);
-    Route::get('/articles/{slug}', [ArticleController::class, 'show']);
     Route::put('/articles/{id}', [ArticleController::class, 'update']);
     Route::delete('/articles/{slug}', [ArticleController::class, 'destroy']);
 
