@@ -155,4 +155,23 @@ class BabyNamesController extends Controller
             }
         }
     } //end getDataForIds
+
+    public function  getSingleName(Request $request) {
+        if (!isset($request)) {
+            return $request;
+        }
+
+        $search = $request->input('search');
+        $babyName = BabyName::where('name', $search)->first();
+
+        if ($babyName == null) {
+            return response()->json($babyName, 404);
+        }
+        $here = $babyName->origin->name;
+        $babyName['origin'] = $here;
+
+
+        return response()->json($babyName, 200);
+    }
+
 }
