@@ -74,4 +74,36 @@ class UserController extends Controller
         return response()->json('Deleted', 200);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|Request
+     */
+    public function saveFavNNames(Request $request) {
+
+        $favNames = auth()->user();
+
+        $here = $request['favNames'];
+
+        $stack = [];
+        foreach ($here as $hero) {
+            $second = $hero['id'];
+            array_push($stack, $second);
+        }
+
+        $favNames->babyName()->detach();
+        $favNames->babyName()->attach($stack);
+
+        return response()->json($favNames, 200);
+    }
+
+    public function getFavoriteBabyNames() {
+        $favNames = auth()->user();
+
+        if (isset($favNames->babyName)) {
+            $favNames['fav_names'] = $favNames->babyName;
+        }
+
+        return response()->json($favNames, 200);
+    }
+
 }

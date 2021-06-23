@@ -117,6 +117,7 @@ class BabyNamesController extends Controller
     public function update(Request $request, $id)
     {
         $article = BabyName::find($id);
+
         $article->update($request->all());
 
         return response()->json('updated', 200);
@@ -156,6 +157,10 @@ class BabyNamesController extends Controller
         }
     } //end getDataForIds
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|Request
+     */
     public function  getSingleName(Request $request) {
         if (!isset($request)) {
             return $request;

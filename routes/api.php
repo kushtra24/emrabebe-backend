@@ -42,6 +42,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/random-articles', [ArticleController::class, 'randomArticles']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/get-single-name', [BabyNamesController::class, 'getSingleName']);
+    Route::get('/get-fav-names', [UserController::class, 'getFavoriteBabyNames']);
+    Route::post('/save-fav-names', [UserController::class, 'saveFavNNames']);
 
     Route::post('/suggest-names', [SuggestNameController::class, 'store']);
     Route::post('/messages', [MessagesController::class, 'store']);
