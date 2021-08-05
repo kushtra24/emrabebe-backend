@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\article;
 use App\Models\Category;
+use App\Models\Newsletter;
 use App\Models\Origin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ArticleController extends Controller {
     /**
@@ -243,9 +245,6 @@ class ArticleController extends Controller {
 
         return response()->json('Deleted', 200);
     }
-
-
-
 
 }
 

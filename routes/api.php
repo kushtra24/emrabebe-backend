@@ -4,8 +4,10 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BabyNamesController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\SuggestNameController;
 use App\Http\Controllers\UserController;
@@ -44,6 +46,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/get-single-name', [BabyNamesController::class, 'getSingleName']);
     Route::get('/get-fav-names', [UserController::class, 'getFavoriteBabyNames']);
     Route::post('/save-fav-names', [UserController::class, 'saveFavNNames']);
+
+    Route::post('/newsletter', [NewsletterController::class, 'store']);
+    Route::delete('/newsletter/{id}', [NewsletterController::class, 'destroy']);
 
     Route::post('/suggest-names', [SuggestNameController::class, 'store']);
     Route::post('/messages', [MessagesController::class, 'store']);
