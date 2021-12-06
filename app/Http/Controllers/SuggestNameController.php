@@ -30,16 +30,26 @@ class SuggestNameController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request) {
-
         // if name exists return error
-        if (BabyName::where('name', '=', $request['name'] )->exists()) {
+        $nameExists = BabyName::where('name', '=', $request['name'] )->exists();
+        $suggestChange = $request['suggest_change'];
+
+        if ($nameExists && $suggestChange != true) {
             // return access denied
-//            throw new \DuplicateKeyException('This name already exists', 380);
             return response()->json('Name already exists', 422);
         }
 
-        $article = SuggestName::create($request->all());
-        return response()->json($article, 200);
+        $suggestChange = new SuggestName;
+        $suggestChange->name = $request['name'];
+        $suggestChange->meaning = $request['meaning'];
+        $suggestChange->gender = $request['gender'];
+        $suggestChange->origin_id = $request['origin_id'];
+        $suggestChange->suggest_change = (boolean)$request['suggest_change'];
+
+        $suggestChange->save();
+
+//        $article = SuggestName::create($request->all());
+        return response()->json('',200);
     }
 
     /**

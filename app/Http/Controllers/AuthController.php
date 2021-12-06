@@ -18,6 +18,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email',  $request->email)->first();
+
         if($user->email_verified_at == null) {
             return response()->json([
                 'message' => 'Not verified',

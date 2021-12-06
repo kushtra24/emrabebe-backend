@@ -18,8 +18,9 @@ class CreateSuggestNamesTable extends Migration
             $table->string('name');
             $table->boolean('gender');
             $table->string('meaning');
-            $table->text('origin');
+            $table->integer('origin_id');
             $table->boolean('approved')->default(false);
+            $table->boolean('suggest_change')->default(false)->nullable();
             $table->timestamps();
         });
     }

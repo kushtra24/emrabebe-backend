@@ -9,5 +9,5 @@ class SuggestName extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'gender', 'origin', 'meaning'];
+    protected $fillable = ['name', 'gender', 'origin_id', 'meaning', 'suggest_change'];
 }
