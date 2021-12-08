@@ -33,7 +33,7 @@ class BabyNamesController extends Controller
         $this->filterByChar($names, $char);
         $this->filterByOrigin($names, $origin);
 
-        $names = $this->executeQuery($names, $page, $limit, $orderType);
+        $names = $this->executeQuery($names, null, null, $orderType);
 
         $this->getOriginIds($names);
 

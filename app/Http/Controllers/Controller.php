@@ -81,6 +81,7 @@ class Controller extends BaseController
             if(isset($limit) && $limit > 0) {
                 $query = $query->limit($limit);
             }
+
             $result = $query->get();
 //            $result = $query->paginate($limit); // laravel doing pagination (slow)
 
