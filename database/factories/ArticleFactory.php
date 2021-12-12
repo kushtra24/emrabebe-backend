@@ -23,6 +23,7 @@ class ArticleFactory extends Factory
      */
     public function definition()
     {
+        $arrayValues = ['de', 'en', 'al'];
         return [
             'title' => $this->faker->sentence(5),
             'slug' => $this->faker->slug(6),
@@ -30,6 +31,7 @@ class ArticleFactory extends Factory
             'is_public' => $this->faker->boolean,
             'photo_source' => $this->faker->url,
             'user_id' => $this->faker->numberBetween(1, 20),
+            'language' => $arrayValues[rand(0,2)],
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')
         ];
     }

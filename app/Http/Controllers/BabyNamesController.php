@@ -18,7 +18,6 @@ class BabyNamesController extends Controller
      */
     public function index(Request $request) {
 
-
         $page = $request->input('page');
         $limit = $request->input('limit', 5);
         $orderType = $request->input('sort', 'desc');

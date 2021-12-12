@@ -34,10 +34,11 @@ class ArticleController extends Controller {
     public function index(Request $request) {
 
         $page = $request->input('page');
-        $limit = $request->input('limit', 5);
+        $limit = $request->input('limit', null);
         $category_id = $request->input('cat_id');
         $orderType = $request->input('sort', 'desc');
         $orderByArr = $request->input('sortBy', 'id');
+        $lang = $request->input('lang', 'en');
 
 //        $articles = new Article;
         $articles = Article::select('*');
@@ -45,6 +46,9 @@ class ArticleController extends Controller {
         if(isset($category_id)) {
             $this->filterArticleByCategory($articles, $category_id);
 //            $orderByArr = 'title';
+        }
+        if(isset($lang)) {
+            $this->filterArticleByLanguage($articles, $lang);
         }
 //        $this->checkArticleSearch($articles, $search); // check for search
 
@@ -104,6 +108,16 @@ class ArticleController extends Controller {
 
         if (!is_null($category_id)) {
             $query = $query->whereIn('articles.id', Article::select('article_id')->from('article_category')->where('category_id', $category_id ));
+        }
+    }
+
+
+    private function filterArticleByLanguage(&$query, $lang) {
+        $this->checkIfQueryIsNotSet($query);
+
+        if(!is_null($lang)) {
+            $arraya = explode(' ', $lang);
+            $query = $query->whereIn('language', $arraya);
         }
     }
 

@@ -73,7 +73,9 @@ class Controller extends BaseController
         // check for pagination
         if(isset($page) && $page > 0) {
             // check limit
-            if(!isset($limit) || $limit <= 0) { $limit = 10; }
+            if(!isset($limit) || $limit <= 0) {
+                $limit = 10;
+            }
             // execute
             $result = $query->paginate($limit);
         } else {
