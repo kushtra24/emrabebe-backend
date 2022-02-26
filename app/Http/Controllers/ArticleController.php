@@ -43,13 +43,15 @@ class ArticleController extends Controller {
 //        $articles = new Article;
         $articles = Article::select('*');
 
+        if(isset($lang)) {
+            $this->filterArticleByLanguage($articles, $lang);
+        }
+
         if(isset($category_id)) {
             $this->filterArticleByCategory($articles, $category_id);
 //            $orderByArr = 'title';
         }
-        if(isset($lang)) {
-            $this->filterArticleByLanguage($articles, $lang);
-        }
+
 //        $this->checkArticleSearch($articles, $search); // check for search
 
         $articles = $this->executeQuery($articles, $page, $limit, $orderType, $orderByArr); // execute the query
@@ -116,8 +118,9 @@ class ArticleController extends Controller {
         $this->checkIfQueryIsNotSet($query);
 
         if(!is_null($lang)) {
-            $arraya = explode(' ', $lang);
-            $query = $query->whereIn('language', $arraya);
+//            $array = explode(' ', $lang);
+            #arreyVal = array_values($array)[0]
+            $query = $query->where('language', $lang);
         }
     }
 
