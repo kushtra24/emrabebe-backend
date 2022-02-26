@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +17,21 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/sendemail', function () {
+////    return view('welcome');
+//
+//    $to_name = 'kushtrim';
+//    $to_email = 'kushtra24@gmail.com';
+//    $data = array("name"=>"kushtrimoo", "body"=>"test email");
+//    Mail::send('emails.mail', $data, function ($message) use ($to_email) {
+//        $message->from("kushtrimcoding@gmail.com", 'username');
+//        $message->to($to_email)
+//        ->subject('laravel main subject');
+//    });
+//
+//});
+
+Route::get('/verifyemail/{token}', [AuthController::class, 'verify']);
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();

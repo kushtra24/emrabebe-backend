@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpDebugIgnoredPathsSettings">
+    <skipped_paths>
+      <skipped_path path="$PROJECT_DIR$/../../phpMyAdmin" />
+    </skipped_paths>
+  </component>
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
@@ -120,6 +125,7 @@
   <component name="PhpStepFilterConfiguration">
     <skipped_functions>
       <skipped_function name="Illuminate\Routing\Pipeline-&gt;Illuminate\Pipeline\{closure:C:\xampp\htdocs\emrabebe-laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:143-174}" />
+      <skipped_function name="PhpMyAdmin\Config::fatalErrorHandler" />
     </skipped_functions>
   </component>
   <component name="PhpUnit">

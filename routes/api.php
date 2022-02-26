@@ -30,12 +30,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Auth
     Route::post('/login', AuthController::class);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('/forgot', [ForgotPasswordController::class, 'forgot']);
-    Route::post('/reset', [MessagesController::class, 'reset']);
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('/reset', [ForgotPasswordController::class, 'resetPassword']);
+
 
     Route::get('/origins', [OriginController::class, 'index']);
     Route::get('/baby-names', [BabyNamesController::class, 'index']);
@@ -55,6 +54,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::post('/messages', [MessagesController::class, 'store']);
 // Users
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
 
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
