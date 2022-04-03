@@ -35,9 +35,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::post('/forgot', [ForgotPasswordController::class, 'forgot']);
     Route::post('/reset', [ForgotPasswordController::class, 'resetPassword']);
 
-
     Route::get('/origins', [OriginController::class, 'index']);
     Route::get('/baby-names', [BabyNamesController::class, 'index']);
+    Route::get('/baby-names-admin', [BabyNamesController::class, 'indexAdmin']);
     Route::get('/baby-names/{id}', [BabyNamesController::class, 'show']);
     Route::get('/articles', [ArticleController::class, 'index']);
     Route::get('/articles/{slug}', [ArticleController::class, 'show']);

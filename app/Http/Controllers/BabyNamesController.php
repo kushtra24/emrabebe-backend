@@ -16,6 +16,61 @@ class BabyNamesController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public function indexAdmin(Request $request) {
+
+        $page = $request->input('page');
+        $limit = $request->input('limit', 5);
+        $orderType = $request->input('sort', 'desc');
+        $orderByArr = $request->input('sortBy', 'id');
+        $gender = $request->input('gender', null);
+        $search = $request->input('search');
+//        $origin = $request->input('origin', null);
+
+        $names = BabyName::select('id','name', 'origin_id', 'description', 'meaning', 'created_at');
+
+        if(isset($search)) {
+            $this->returnSearch($names, $search);
+        }
+
+        $names = $this->executeQuery($names, $page, $limit, $orderType);
+
+        $this->getOriginIds($names);
+
+        return response()->json($names, 200);
+    }
+
+
+    /**
+     * @param $query
+     * @param $search
+     * @return mixed
+     */
+    public function returnSearch(&$query, $search) {
+
+        if (!isset($query)) {
+            return $query;
+        }
+
+        if (!is_null($search)) {
+            $searchTerms = $this->stringToArray($search, ' ');
+//            $query->leftJoin($bigPictureTable . '.customer', $localDb . '.contracts.customer_id', '=', $bigPictureTable .'.customer.id');
+            $query = $query->where(function ($query) use ($searchTerms) {
+                for ($i = 0, $max = count($searchTerms); $i < $max; $i++) {
+                    $term = str_replace('_', '\_', mb_strtolower('%' . $searchTerms[$i] . '%'));
+                    $query->whereRaw("(Lower(name) LIKE ?)", [$term, $term]);
+                }
+            });
+//            $this->orderByArr = 'end_date';
+        }
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request) {
 
         $page = $request->input('page');
@@ -35,6 +90,7 @@ class BabyNamesController extends Controller
         $names = $this->executeQuery($names, null, null, $orderType);
 
         $this->getOriginIds($names);
+
 
         return response()->json($names, 200);
     }
