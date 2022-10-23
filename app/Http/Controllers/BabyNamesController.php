@@ -234,4 +234,12 @@ class BabyNamesController extends Controller
         return response()->json($babyName, 200);
     }
 
+    /**
+     * increment favored on a name for statistics reasons
+     * @param Request $request
+     */
+    public function incrementFavoredName(Request $request) {
+        BabyName::where('id', $request['id'])->increment('favored');
+    }
+
 }

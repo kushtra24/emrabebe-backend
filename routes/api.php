@@ -11,6 +11,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\SuggestNameController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavoriteNamesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,12 +47,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/get-single-name', [BabyNamesController::class, 'getSingleName']);
     Route::get('/get-fav-names', [UserController::class, 'getFavoriteBabyNames']);
     Route::post('/save-fav-names', [UserController::class, 'saveFavNNames']);
+    Route::post('/increment-favored', [BabyNamesController::class, 'incrementFavoredName']);
 
     Route::post('/newsletter', [NewsletterController::class, 'store']);
     Route::delete('/newsletter/{id}', [NewsletterController::class, 'destroy']);
 
     Route::post('/suggest-names', [SuggestNameController::class, 'store']);
     Route::post('/messages', [MessagesController::class, 'store']);
+
 // Users
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);

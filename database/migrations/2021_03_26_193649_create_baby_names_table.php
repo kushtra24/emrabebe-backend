@@ -20,6 +20,7 @@ class CreateBabyNamesTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('gender_id');
             $table->string('meaning')->nullable();
+            $table->integer('favored')->default(0)->nullable();
             $table->timestamps();
         });
     }
