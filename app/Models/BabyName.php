@@ -29,11 +29,11 @@ class BabyName extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function origin()
+    public function origins()
     {
-        return $this->belongsTo(Origin::class);
+        return $this->belongsToMany(Origin::class, 'baby_name_origin', 'origin_id', 'babyName_id');
     }
 
     /**

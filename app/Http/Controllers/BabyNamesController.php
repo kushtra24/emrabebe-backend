@@ -142,8 +142,12 @@ class BabyNamesController extends Controller
      */
     public function store(Request $request)
     {
-        $article = BabyName::create($request->all());
-        return response()->json($article, 200);
+        $babyName = BabyName::create($request->all());
+
+        // attach categories of article
+        $babyName->origin()->attach($request['origin_id']);
+
+        return response()->json($babyName, 200);
     }
 
     /**
@@ -171,9 +175,12 @@ class BabyNamesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $article = BabyName::find($id);
+        $babyName = BabyName::find($id);
 
-        $article->update($request->all());
+        $babyName->update($request->all());
+        // attach categories of article
+        $babyName->origin()->detach();
+        $babyName->origin()->attach($request['origin_id']);
 
         return response()->json('updated', 200);
     }

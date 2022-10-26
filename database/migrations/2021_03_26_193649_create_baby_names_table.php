@@ -16,7 +16,6 @@ class CreateBabyNamesTable extends Migration
         Schema::create('baby_names', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('origin_id');
             $table->text('description')->nullable();
             $table->boolean('gender_id');
             $table->string('meaning')->nullable();

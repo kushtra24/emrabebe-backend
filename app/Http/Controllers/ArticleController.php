@@ -154,6 +154,7 @@ class ArticleController extends Controller {
 
         // merge the Auth in user on the request
         $request->merge(['user_id' => auth()->user()->id]);
+
         // create user
         $article = Article::create($request->all());
 

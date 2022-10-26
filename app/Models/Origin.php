@@ -13,10 +13,10 @@ class Origin extends Model
     protected $fillable = ['slug', 'name', 'name_de', 'name_en', 'native', 'active'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function babyNames() {
-        return $this->hasMany(BabyName::class);
+        return $this->belongsToMany(BabyName::class, 'baby_name_origin', 'babyName_id', 'origin_id');
     }
 
     public function getCreatedAtAttribute($date)
