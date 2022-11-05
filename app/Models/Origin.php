@@ -16,7 +16,7 @@ class Origin extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function babyNames() {
-        return $this->belongsToMany(BabyName::class, 'baby_name_origin', 'babyName_id', 'origin_id');
+        return $this->belongsToMany(BabyName::class, 'baby_name_origin', 'origin_id', 'babyName_id');
     }
 
     public function getCreatedAtAttribute($date)

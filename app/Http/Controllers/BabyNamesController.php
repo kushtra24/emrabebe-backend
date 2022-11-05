@@ -26,7 +26,7 @@ class BabyNamesController extends Controller
         $search = $request->input('search');
 //        $origin = $request->input('origin', null);
 
-        $names = BabyName::select('id','name', 'origin_id', 'description', 'meaning', 'created_at');
+        $names = BabyName::select('id','name', 'description', 'meaning', 'created_at');
 
         if(isset($search)) {
             $this->returnSearch($names, $search);
@@ -34,7 +34,7 @@ class BabyNamesController extends Controller
 
         $names = $this->executeQuery($names, $page, $limit, $orderType);
 
-        $this->getOriginIds($names);
+//        $this->getNameOrigins($names);
 
         return response()->json($names, 200);
     }
@@ -81,15 +81,17 @@ class BabyNamesController extends Controller
         $char = $request->input('char', null);
         $origin = $request->input('origin', null);
 
-        $names = BabyName::select('id','name', 'origin_id', 'description', 'meaning', 'created_at');
+        $names = BabyName::select('id','name', 'description', 'meaning', 'created_at');
 
         $this->filterByGender($names, $gender);
         $this->filterByChar($names, $char);
-        $this->filterByOrigin($names, $origin);
+        if($origin) {
+            $this->filterByOrigin($names, $origin);
+        }
 
         $names = $this->executeQuery($names, null, null, $orderType);
 
-        $this->getOriginIds($names);
+        $this->getNameOrigins($names);
 
 
         return response()->json($names, 200);
@@ -98,13 +100,15 @@ class BabyNamesController extends Controller
 
     /**
      * @param $query
-     * @param $origin
+     * @param $originId
      * @return mixed
      */
-    public function filterByOrigin(&$query, $origin) {
+    public function filterByOrigin(&$query, $originId) {
         if (!isset($query)) { return $query; }
-        if (!is_null($origin)) {
-            $query = $query->where('origin_id', $origin);
+        if (!is_null($originId)) {
+            $query->whereHas('origins',function($query) use($originId){
+                $query->where('origin_id', $originId);
+            });
         }
     }
 
@@ -142,10 +146,17 @@ class BabyNamesController extends Controller
      */
     public function store(Request $request)
     {
-        $babyName = BabyName::create($request->all());
+        $babyName = new BabyName;
+        $babyName->name = $request['name'];
+        $babyName->description = $request['description'];
+        $babyName->gender_id = $request['gender_id'];
+        $babyName->meaning = $request['meaning'];
+        $babyName->created_at = $request['created_at'];
+
+        $babyName->save();
 
         // attach categories of article
-        $babyName->origin()->attach($request['origin_id']);
+        $babyName->origins()->attach($request['origin_id']);
 
         return response()->json($babyName, 200);
     }
@@ -159,9 +170,10 @@ class BabyNamesController extends Controller
     public function show($id)
     {
         $babyName = BabyName::findOrFail($id);
-        $here = $babyName->origin->name;
-        $babyName['origin'] = $here;
 
+        if (isset($babyName->origins)) {
+            $babyName['origins'] = $babyName->origins;
+        }
         return response()->json($babyName, 200);
     }
 
@@ -179,8 +191,8 @@ class BabyNamesController extends Controller
 
         $babyName->update($request->all());
         // attach categories of article
-        $babyName->origin()->detach();
-        $babyName->origin()->attach($request['origin_id']);
+        $babyName->origins()->detach();
+        $babyName->origins()->attach($request['origin_id']);
 
         return response()->json('updated', 200);
     }
@@ -202,28 +214,37 @@ class BabyNamesController extends Controller
     /**
      * get contract information from other models depending on the id
      * @param $query
+     * @return array
      */
-    public function getOriginIds($query) {
-        // get the get data from Person depending on the id on the contract
-        if (isset($query) && is_countable($query)) {
-            foreach ($query as &$entity) {
-                if (!isset($entity)) { continue; }
-                // get data
-                $origin = Origin::find($entity['origin_id']);
-                // check if has data and get the customer name
-                if (isset($origin)) {
-                    // build a new json object and assign origin->name to it
-                    $entity['origin'] = $origin->name;
-                }
+    public function getNameOrigins(&$query) {
+
+        foreach($query as $article) {
+            if (isset($article)) {
+               $article->origins;
             }
         }
+         //get the get data from Person depending on the id on the contract
+//        if (isset($query) && is_countable($query)) {
+//            foreach ($query as &$entity) {
+//                if (!isset($entity)) { continue; }
+//
+//                if (isset($entity->origins)) {
+//                    $originObjects = $entity->origins;
+//                    $competition_all = [];
+//                    foreach($originObjects as $object) {
+//                        array_push($competition_all, $object->name);
+//                    }
+//                    return $entity->push((object)$competition_all);
+//                }
+//            }
+//        }
     } //end getDataForIds
 
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|Request
      */
-    public function  getSingleName(Request $request) {
+    public function getSingleName(Request $request) {
         if (!isset($request)) {
             return $request;
         }
@@ -234,9 +255,9 @@ class BabyNamesController extends Controller
         if ($babyName == null) {
             return response()->json($babyName, 404);
         }
-        $here = $babyName->origin->name;
-        $babyName['origin'] = $here;
-
+        if (isset($babyName->origins)) {
+            $babyName['origins'] = $babyName->origins;
+        }
 
         return response()->json($babyName, 200);
     }
@@ -247,6 +268,10 @@ class BabyNamesController extends Controller
      */
     public function incrementFavoredName(Request $request) {
         BabyName::where('id', $request['id'])->increment('favored');
+    }
+
+    private function belongsToMany($class)
+    {
     }
 
 }
