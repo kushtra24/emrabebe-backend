@@ -30,4 +30,5 @@ class Article extends Model
     {
         return Carbon::parse($date)->format('d.m.Y');
     }
+
 }

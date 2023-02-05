@@ -75,7 +75,7 @@ class BabyNamesController extends Controller
 
         $page = $request->input('page');
         $limit = $request->input('limit', 5);
-        $orderType = $request->input('sort', 'desc');
+        $orderType = $request->input('sort', 'asc');
         $orderByArr = $request->input('sortBy', 'id');
         $gender = $request->input('gender', null);
         $char = $request->input('char', null);

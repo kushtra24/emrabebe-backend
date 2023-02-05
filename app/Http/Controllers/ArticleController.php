@@ -49,6 +49,7 @@ class ArticleController extends Controller {
 
         $articles = $this->executeQuery($articles, $page, $limit, $orderType, $orderByArr); // execute the query
 
+
         foreach($articles as $article) {
             if (isset($article)) {
                 $article['categories'] = $article->category;
