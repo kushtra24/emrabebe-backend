@@ -84,7 +84,8 @@ class Controller extends BaseController
                 $query = $query->limit($limit);
             }
 
-            $result = $query->get();
+            // $result = $query->get();
+            $result = $query;
 //            $result = $query->paginate($limit); // laravel doing pagination (slow)
 
         }

@@ -90,8 +90,8 @@ class UserController extends Controller
             array_push($stack, $second);
         }
 
-        $favNames->babyName()->detach();
-        $favNames->babyName()->attach($stack);
+        // $favNames->babyName()->detach();
+        // $favNames->babyName()->attach($stack);
 
         return response()->json($favNames, 200);
     }

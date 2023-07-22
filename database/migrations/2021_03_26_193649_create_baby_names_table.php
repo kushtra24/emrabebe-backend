@@ -16,11 +16,12 @@ class CreateBabyNamesTable extends Migration
         Schema::create('baby_names', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description')->nullable();
             $table->boolean('gender_id');
+            $table->text('description')->nullable();
             $table->string('meaning')->nullable();
+            $table->string('meaning_de')->nullable();
+            $table->string('meaning_al')->nullable();
             $table->integer('favored')->default(0)->nullable();
-            $table->timestamps();
         });
     }
 

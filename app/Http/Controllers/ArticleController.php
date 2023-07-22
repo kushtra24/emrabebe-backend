@@ -62,7 +62,7 @@ class ArticleController extends Controller {
 
     public function randomArticles() {
 
-        $articles = Article::all()->random(4);
+        $articles = Article::inRandomOrder()->limit(5)->get();
 
         return response()->json($articles,200);
     }

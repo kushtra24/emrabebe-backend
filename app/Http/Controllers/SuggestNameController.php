@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BabyName;
 use App\Models\SuggestName;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class SuggestNameController extends Controller
 {
@@ -21,6 +21,61 @@ class SuggestNameController extends Controller
         $names = $this->executeQuery($names);
 
         return response()->json($names, 200);
+    }
+
+    /**
+     * Store suggestion about name change
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeNameChange(Request $request) {
+
+        $nameExists = BabyName::find($request['nameid']);
+        
+        $suggestion = $request['suggestion'];
+
+        if (!$nameExists->count() || !isset($suggestion)) {
+            // return access denied
+            return response()->json('No name provided', 422);
+        }
+
+        $suggestChange = new SuggestName;
+        $suggestChange->name = $nameExists->name;
+        $suggestChange->meaning = $nameExists->meaning;
+        $suggestChange->exists = true;
+        $suggestChange->suggest_change = $request['suggestion'];
+
+        $suggestChange->save();
+        return response()->json('',200);
+
+    }
+    /**
+     * Store suggestion about new name
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeNewNameSugesstion(Request $request) {
+
+        $nameExists = BabyName::find($request['suggestion']['name']);
+        
+        // $suggestion = $request['suggestion'];
+
+        if ($nameExists) {
+            // return access denied
+            return response()->json('Name already exists', 422);
+        }
+
+        $suggestnew = new SuggestName;
+        $suggestnew->name = $request['suggestion']['name'];
+        $suggestnew->gender = $request['suggestion']['gender'];
+        $suggestnew->origin_id = $request['suggestion']['origin'];
+        $suggestnew->meaning = $request['suggestion']['meaning'];
+        $suggestnew->exists = false;
+
+        $suggestnew->save();
+        return response()->json('',200);
     }
 
     /**
@@ -92,8 +147,6 @@ class SuggestNameController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id) {
-        Log::info(var_export($id, true));
-
         $article = SuggestName::find($id);
         $article->delete();
         return response()->json($id, 200);

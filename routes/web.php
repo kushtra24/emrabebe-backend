@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 
-//Route::get('/sendemail', function () {
-////    return view('welcome');
-//
+// Route::get('/sendemail', function () {
+// //    return view('welcome');
+
 //    $to_name = 'kushtrim';
 //    $to_email = 'kushtra24@gmail.com';
 //    $data = array("name"=>"kushtrimoo", "body"=>"test email");
@@ -28,8 +28,12 @@ use Illuminate\Support\Facades\Mail;
 //        $message->to($to_email)
 //        ->subject('laravel main subject');
 //    });
-//
-//});
+
+// });
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::get('/verifyemail/{token}', [AuthController::class, 'verify']);
 

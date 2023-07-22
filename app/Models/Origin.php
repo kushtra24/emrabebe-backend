@@ -19,6 +19,15 @@ class Origin extends Model
         return $this->belongsToMany(BabyName::class, 'baby_name_origin', 'origin_id', 'babyName_id');
     }
 
+    /**
+     * Determine if the user is an administrator.
+     */
+    protected function isAdmin(): Attribute
+    {
+        return new Attribute(
+            get: fn () => 'yes',
+        );
+    }
     public function getCreatedAtAttribute($date)
     {
         return Carbon::parse($date)->format('d.m.Y');

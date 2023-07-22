@@ -22,12 +22,12 @@ class BabyNameFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'name' => $this->faker->firstName(),
-            'description' => $this->faker->paragraph(4),
-            'meaning' => $this->faker->paragraph(2),
-            'gender_id' => $this->faker->boolean,
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ];
+        // return [
+        //     'name' => $this->faker->firstName(),
+        //     'description' => $this->faker->paragraph(4),
+        //     'meaning' => $this->faker->paragraph(2),
+        //     'gender_id' => $this->faker->boolean,
+        //     'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        // ];
     }
 }

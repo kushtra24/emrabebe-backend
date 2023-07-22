@@ -7,6 +7,7 @@ use App\Models\Origin;
 use App\Models\SuggestName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class BabyNamesController extends Controller
 {
@@ -17,16 +18,16 @@ class BabyNamesController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function indexAdmin(Request $request) {
+        // $orderByArr = $request->input('sortBy', 'id');
+        // $gender = $request->input('gender', null);
+        // $origin = $request->input('origin', null);
 
         $page = $request->input('page');
         $limit = $request->input('limit', 5);
         $orderType = $request->input('sort', 'desc');
-        $orderByArr = $request->input('sortBy', 'id');
-        $gender = $request->input('gender', null);
         $search = $request->input('search');
-//        $origin = $request->input('origin', null);
 
-        $names = BabyName::select('id','name', 'description', 'meaning', 'created_at');
+        $names = BabyName::select('id','name', 'meaning', 'meaning_de', 'meaning_al');
 
         if(isset($search)) {
             $this->returnSearch($names, $search);
@@ -73,28 +74,47 @@ class BabyNamesController extends Controller
      */
     public function index(Request $request) {
 
-        $page = $request->input('page');
-        $limit = $request->input('limit', 5);
+        // $page = $request->input('page');
+        // $limit = $request->input('limit', 5);
+        // $orderByArr = $request->input('sortBy', 'id');
+
         $orderType = $request->input('sort', 'asc');
-        $orderByArr = $request->input('sortBy', 'id');
         $gender = $request->input('gender', null);
         $char = $request->input('char', null);
-        $origin = $request->input('origin', null);
+        $originIDs = $request->input('origin', null);
+        $locale = $request->input('locale', 'en');
 
-        $names = BabyName::select('id','name', 'description', 'meaning', 'created_at');
-
-        $this->filterByGender($names, $gender);
-        $this->filterByChar($names, $char);
-        if($origin) {
-            $this->filterByOrigin($names, $origin);
+        $localeMeaning = 'meaning';
+        if($locale == 'en') {
+            $localeMeaning = 'meaning';
+        } else {
+            $localeMeaning = 'meaning_'.$locale;
         }
 
-        $names = $this->executeQuery($names, null, null, $orderType);
 
-        $this->getNameOrigins($names);
+        $namesQuery = DB::table('baby_names')
+                ->join('baby_name_origin', 'baby_names.id', '=', 'baby_name_origin.babyName_id')
+                ->select('id', 'name', $localeMeaning.' as meaning', 'origin_id')
+                ->whereColumn('baby_names.id', '=', 'baby_name_origin.babyName_id')
+                ->where('baby_names.gender_id', '=', $gender);
+
+                if($char || $gender == 0) {
+                    $this->filterNamesByChar($namesQuery, $char);
+                }
+                
+                if($originIDs || $gender == 0) {
+                    $this->filterNamesByOrigin($namesQuery, $originIDs);
+                } else {
+                    return response()->json([
+                        'message' => 'Origin not found'
+                    ], 404);
+                }
+
+                $namesQuery = $namesQuery->orderBy('id', $orderType);
+                $namesQuery = $namesQuery->get();
 
 
-        return response()->json($names, 200);
+        return response()->json($namesQuery, 200);
     }
 
 
@@ -103,13 +123,21 @@ class BabyNamesController extends Controller
      * @param $originId
      * @return mixed
      */
-    public function filterByOrigin(&$query, $originId) {
+    public function filterNamesByOrigin(&$query, $originIds) {
         if (!isset($query)) { return $query; }
-        if (!is_null($originId)) {
-            $query->whereHas('origins',function($query) use($originId){
-                $query->where('origin_id', $originId);
-            });
+        if (!is_null($originIds)) {
+            
+            $OriginsArray = explode(',', $originIds);
+            $conditions = array();
+
+            foreach ($OriginsArray as $origin) {
+                $conditions[] = "origin_id = " . $origin;
+            }
+            $conditions_string = implode(' OR ', $conditions);
+            $conditions_string = "(" . $conditions_string . ")";
+            $query = $query->whereRaw($conditions_string);
         }
+        return $query;
     }
 
     /**
@@ -117,11 +145,24 @@ class BabyNamesController extends Controller
      * @param $char
      * @return mixed
      */
-    public function filterByChar(&$query, $char) {
+    public function filterNamesByChar(&$query, $char) {
         if (!isset($query)) { return $query; }
         if (!is_null($char)) {
-            $query = $query->where('name', 'LIKE', $char.'%');
+            $lettersArray = explode(',', $char);
+            $conditions = array();
+            foreach ($lettersArray as $letter) {
+                $conditions[] = "name LIKE '$letter%'";
+            }
+            $conditions_string = implode(' OR ', $conditions);
+            $conditions_string = "(" . $conditions_string . ")";
+            $query = $query->whereRaw($conditions_string);
         }
+        return $query;
+    }
+
+    function convert_csv_to_psv($csv_string) {
+        $psv_string = str_replace(',', '|', $csv_string);
+        return $psv_string;
     }
 
 
@@ -130,7 +171,7 @@ class BabyNamesController extends Controller
      * @param $gender
      * @return mixed
      */
-    public function filterByGender(&$query, $gender) {
+    public function filterNamesByGender(&$query, $gender) {
         if (!isset($query)) { return $query; }
         if (!is_null($gender)) {
            $query = $query->where('gender_id', $gender);
@@ -174,6 +215,8 @@ class BabyNamesController extends Controller
         if (isset($babyName->origins)) {
             $babyName['origins'] = $babyName->origins;
         }
+        // $babyName->setAttribute('origins', $babyName->origins);
+        
         return response()->json($babyName, 200);
     }
 
@@ -205,39 +248,24 @@ class BabyNamesController extends Controller
      */
     public function destroy($id)
     {
-        $article = BabyName::find($id);
-        $article->delete();
+        $babyName = BabyName::find($id);
+        $babyName->delete();
         return response()->json('Deleted', 200);
     }
 
 
     /**
-     * get contract information from other models depending on the id
+     * get
      * @param $query
      * @return array
      */
     public function getNameOrigins(&$query) {
 
-        foreach($query as $article) {
-            if (isset($article)) {
-               $article->origins;
+        foreach($query as $babyName) {
+            if (isset($babyName)) {
+               $babyName->origins;
             }
         }
-         //get the get data from Person depending on the id on the contract
-//        if (isset($query) && is_countable($query)) {
-//            foreach ($query as &$entity) {
-//                if (!isset($entity)) { continue; }
-//
-//                if (isset($entity->origins)) {
-//                    $originObjects = $entity->origins;
-//                    $competition_all = [];
-//                    foreach($originObjects as $object) {
-//                        array_push($competition_all, $object->name);
-//                    }
-//                    return $entity->push((object)$competition_all);
-//                }
-//            }
-//        }
     } //end getDataForIds
 
     /**
@@ -268,10 +296,6 @@ class BabyNamesController extends Controller
      */
     public function incrementFavoredName(Request $request) {
         BabyName::where('id', $request['id'])->increment('favored');
-    }
-
-    private function belongsToMany($class)
-    {
     }
 
 }

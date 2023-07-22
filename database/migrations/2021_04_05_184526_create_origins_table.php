@@ -15,13 +15,10 @@ class CreateOriginsTable extends Migration
     {
         Schema::create('origins', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
             $table->string('name');
-            $table->string('name_al')->nullable();
             $table->string('name_de')->nullable();
-            $table->string('native');
+            $table->string('name_al')->nullable();
             $table->boolean('active')->default(false);
-            $table->timestamps();
         });
     }
 

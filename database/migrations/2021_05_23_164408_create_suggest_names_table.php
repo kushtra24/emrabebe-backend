@@ -16,10 +16,11 @@ class CreateSuggestNamesTable extends Migration
         Schema::create('suggest_names', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('gender');
+            $table->boolean('gender')->nullable();
             $table->string('meaning');
-            $table->integer('origin_id');
+            $table->integer('origin_id')->nullable();
             $table->boolean('approved')->default(false);
+            $table->boolean('exists')->nullable();
             $table->boolean('suggest_change')->default(false)->nullable();
             $table->timestamps();
         });

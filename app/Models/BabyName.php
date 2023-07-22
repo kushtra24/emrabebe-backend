@@ -10,8 +10,11 @@ class BabyName extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'gender_id', 'meaning', 'created_at'];
-
+    protected $fillable = ['name', 'gender_id', 'meaning', 'meaning_de', 'meaning_al', 'favored'];
+    protected $hidden = ['description'];
+    
+    public $timestamps = false;
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -46,4 +49,5 @@ class BabyName extends Model
     {
         return Carbon::parse($date)->format('d.m.Y');
     }
+
 }

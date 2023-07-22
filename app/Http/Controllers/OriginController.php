@@ -12,9 +12,24 @@ class OriginController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $origin = Origin::all();
+        $locale = $request->input('locale');
+        
+        $localeName = 'name';
+
+        if($locale == 'en') {
+            $localeName = 'name';
+            $localeId = 'WHEN id = 17 THEN 0 WHEN id = 26 THEN 1 ELSE 3 END';
+        } else if($locale == 'al'){
+            $localeName = 'name_'.$locale;
+            $localeId = 'WHEN id = 16 THEN 0 WHEN id = 108 THEN 1 WHEN id = 109 THEN 2 ELSE 3 END';
+        } else {
+            $localeName = 'name_'.$locale;
+            $localeId = 'WHEN id = 29 THEN 0 ELSE 1 END';
+        }
+
+        $origin = Origin::select('id', "$localeName AS name")->orderByRaw("CASE {$localeId}")->orderBy('name')->get();
 
         return response()->json($origin, 200);
     }

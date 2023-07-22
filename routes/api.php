@@ -53,6 +53,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::delete('/newsletter/{id}', [NewsletterController::class, 'destroy']);
 
     Route::post('/suggest-names', [SuggestNameController::class, 'store']);
+    Route::post('/suggest-names-change', [SuggestNameController::class, 'storeNameChange']);
+    Route::post('/suggest-new-name', [SuggestNameController::class, 'storeNewNameSugesstion']);
     Route::post('/messages', [MessagesController::class, 'store']);
 
 // Users
