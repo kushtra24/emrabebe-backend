@@ -10,7 +10,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'article_id', 'created_at'];
+    protected $fillable = ['title', 'description', 'created_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
