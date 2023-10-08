@@ -45,7 +45,6 @@ class OriginSeeder extends Seeder
             ['name' =>"England", 'name_de' => "England", 'name_al' => "Anglia", 'active' => true],
             ['name' =>"Estonia", 'name_de' => "Estland", 'name_al' => "Estonia", 'active' => true],
             ['name' =>"Frence", 'name_de' => "Frankreich", 'name_al' => "Franca", 'active' => true],
-            ['name' =>"Germay", 'name_de' => "Deutschland", 'name_al' => "Gjermania", 'active' => true],
             ['name' =>"Greece", 'name_de' => "Griechenland", 'name_al' => "Greqia", 'active' => true],
             ['name' =>"Hawaii", 'name_de' => "Hawaii", 'name_al' => "Havai", 'active' => true],
             ['name' =>"Hebrew", 'name_de' => "hebräisch", 'name_al' => "hebraishtja", 'active' => true],
@@ -82,7 +81,7 @@ class OriginSeeder extends Seeder
             ['name' =>"Welsh", 'name_de' => "Walisisch", 'name_al' => "Uellsisht", 'active' => true],
             ['name' =>"Eritrea", 'name_de' => "Eritrea", 'name_al' => "Eritrea", 'active' => true],
             ['name' =>"France", 'name_de' => "Frankreich", 'name_al' => "Franca", 'active' => true],
-            ['name' =>"Germany", 'name_de' => "Deutschland", 'name_al' => "Gjermania", 'active' => true],
+            ['name' =>"Germany", 'name_de' => "Deutsch", 'name_al' => "Gjermani", 'active' => true],
             ['name' =>"India", 'name_de' => "Indien", 'name_al' => "Indi", 'active' => true],
             ['name' =>"Mongolia", 'name_de' => "Mongolei", 'name_al' => "Mongolia", 'active' => true],
             ['name' =>"Iran", 'name_de' => "Iran", 'name_al' => "Irani", 'active' => true],
@@ -126,7 +125,7 @@ class OriginSeeder extends Seeder
             ['name' =>"Morocco", 'name_de' => "Marokko", 'name_al' => "Maroku", 'active' => true],
             ['name' =>"Islamic Albanian", 'name_de' => "Islamisch Albanisch", 'name_al' => "Shqip Musliman", 'active' => true],
             ['name' =>"Christian Albanian", 'name_de' => "Christlich Albanisch", 'name_al' => "Shqip Krishter", 'active' => true],
-
+            ['name' =>"Old-German", 'name_de' => "Alt Detusch", 'name_al' => "Gjermanisht e vjeter", 'active' => true]
         );
         
         Origin::insert($data);

@@ -22,12 +22,13 @@ class Origin extends Model
     /**
      * Determine if the user is an administrator.
      */
-    protected function isAdmin(): Attribute
-    {
-        return new Attribute(
-            get: fn () => 'yes',
-        );
-    }
+    // protected function isAdmin(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn () => 'yes',
+    //     );
+    // }
+    
     public function getCreatedAtAttribute($date)
     {
         return Carbon::parse($date)->format('d.m.Y');
