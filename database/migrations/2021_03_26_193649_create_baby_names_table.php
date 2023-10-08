@@ -18,9 +18,9 @@ class CreateBabyNamesTable extends Migration
             $table->string('name');
             $table->boolean('gender_id');
             $table->text('description')->nullable();
-            $table->string('meaning')->nullable();
-            $table->string('meaning_de')->nullable();
-            $table->string('meaning_al')->nullable();
+            $table->text('meaning')->nullable();
+            $table->text('meaning_de')->nullable();
+            $table->text('meaning_al')->nullable();
             $table->integer('favored')->default(0)->nullable();
         });
     }

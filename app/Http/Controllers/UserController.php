@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\AuthenticateationException;
 
 class UserController extends Controller
 {
@@ -80,6 +80,10 @@ class UserController extends Controller
      */
     public function saveFavNNames(Request $request) {
 
+        if(!auth()) {
+            throw new AuthenticateationException();
+        }
+
         $favNames = auth()->user();
 
         $here = $request['favNames'];
@@ -90,20 +94,25 @@ class UserController extends Controller
             array_push($stack, $second);
         }
 
-        // $favNames->babyName()->detach();
-        // $favNames->babyName()->attach($stack);
+        $favNames->babyName()->detach();
+        $favNames->babyName()->attach($stack);
 
         return response()->json($favNames, 200);
     }
 
     public function getFavoriteBabyNames() {
+
+        if(!auth()) {
+            throw new AuthenticateationException();
+        }
+
         $favNames = auth()->user();
 
         if (isset($favNames->babyName)) {
             $favNames['fav_names'] = $favNames->babyName;
         }
 
-        return response()->json($favNames, 200);
+        return response()->json($favNames['fav_names'], 200);
     }
 
 }

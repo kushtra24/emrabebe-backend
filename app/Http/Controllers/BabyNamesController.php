@@ -73,11 +73,6 @@ class BabyNamesController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request) {
-
-        // $page = $request->input('page');
-        // $limit = $request->input('limit', 5);
-        // $orderByArr = $request->input('sortBy', 'id');
-
         $orderType = $request->input('sort', 'asc');
         $gender = $request->input('gender', null);
         $char = $request->input('char', null);
