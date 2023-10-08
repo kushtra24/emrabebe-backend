@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\article;
+use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
