@@ -21,19 +21,24 @@ use Illuminate\Support\Facades\Mail;
 // //    return view('welcome');
 
 //    $to_name = 'kushtrim';
-//    $to_email = 'kushtra24@gmail.com';
+//    $to_email = 'private@kushtrim.net';
 //    $data = array("name"=>"kushtrimoo", "body"=>"test email");
-//    Mail::send('emails.mail', $data, function ($message) use ($to_email) {
-//        $message->from("kushtrimcoding@gmail.com", 'username');
+
+// if(
+//     Mail::send('emails.testmail', $data, function ($message) use ($to_email) {
+//        $message->from("noreplay@emrabebe.com", 'username');
 //        $message->to($to_email)
 //        ->subject('laravel main subject');
-//    });
-
+//    })   
+// ) {
+//     return response()->json('email SEND!!', 200);
+// }
+//  else {
+//     echo 'Error: Unable to send email.';
+//  }
 // });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () { return view('welcome'); });
 
 Route::get('/verifyemail/{token}', [AuthController::class, 'verify']);
 

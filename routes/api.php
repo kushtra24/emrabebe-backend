@@ -93,3 +93,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/suggest-names/{id}', [SuggestNameController::class, 'destroy']);
 
 });
+
