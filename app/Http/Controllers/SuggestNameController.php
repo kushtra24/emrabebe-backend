@@ -10,17 +10,29 @@ use Illuminate\Support\Facades\DB;
 class SuggestNameController extends Controller
 {
 
+
+    private $rules = [
+        'suggestion' => 'required|string',
+    ];
+
+    private $newNameRules = [
+            'name' => 'required',
+            'gender' => 'required',
+            'meaning' => 'required',
+    ];
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
-        $names = SuggestName::select('id', 'name', 'gender', 'origin', 'meaning', 'approved');
 
-        $names = $this->executeQuery($names);
+        $names = DB::table('suggest_names');
+        $names = $names->get();
 
-        return response()->json($names, 200);
+        return response()->json($names,200);
     }
 
     /**
@@ -30,6 +42,8 @@ class SuggestNameController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function storeNameChange(Request $request) {
+
+        $this->validate($request, $this->rules);
 
         $nameExists = BabyName::find($request['nameid']);
         
@@ -58,9 +72,9 @@ class SuggestNameController extends Controller
      */
     public function storeNewNameSugesstion(Request $request) {
 
+        $this->validate($request, $this->newNameRules);
+
         $nameExists = BabyName::find($request['suggestion']['name']);
-        
-        // $suggestion = $request['suggestion'];
 
         if ($nameExists) {
             // return access denied

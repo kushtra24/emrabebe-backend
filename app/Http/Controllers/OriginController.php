@@ -20,13 +20,13 @@ class OriginController extends Controller
 
         if($locale == 'en') {
             $localeName = 'name';
-            $localeId = 'WHEN id = 17 THEN 0 WHEN id = 26 THEN 1 ELSE 3 END';
+            $localeId = 'WHEN id = 17 THEN 0 WHEN id = 26 THEN 1 ELSE 2 END';
         } else if($locale == 'al'){
             $localeName = 'name_'.$locale;
             $localeId = 'WHEN id = 16 THEN 0 WHEN id = 108 THEN 1 WHEN id = 109 THEN 2 ELSE 3 END';
         } else {
             $localeName = 'name_'.$locale;
-            $localeId = 'WHEN id = 29 THEN 0 ELSE 1 END';
+            $localeId = 'WHEN id = 65 THEN 0 WHEN id = 109 THEN 1 ELSE 2 END';
         }
 
         $origin = Origin::select('id', "$localeName AS name")->orderByRaw("CASE {$localeId}")->orderBy('name')->get();
