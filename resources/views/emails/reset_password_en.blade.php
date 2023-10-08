@@ -21,7 +21,7 @@
     font-size: 10px;
     margin: 15px auto;">
     You are receiving this message automatically because you have requested a new password.
-    © emrabebe.com, E info@emrabebe.com,
+    © emrabebe.com, E accounts@emrabebe.com,
     Impressum Datenschutz AGB
 </p>
 

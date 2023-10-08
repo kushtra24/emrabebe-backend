@@ -18,7 +18,7 @@
     font-size: 10px;
     margin: 15px auto;">
     Du erhältst diese Nachricht automatisiert, weil du ein neues Passwort angefordert hast.
-    © emrabebe.com, E info@emrabebe.com,
+    © emrabebe.com, E accounts@emrabebe.com,
     Impressum Datenschutz AGB
 </p>
 

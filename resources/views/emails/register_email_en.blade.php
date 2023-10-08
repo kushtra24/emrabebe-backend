@@ -17,8 +17,8 @@
     width: 600px;
     font-size: 10px;
     margin: 15px auto;">
-    Mesazhi dërgohet automatikisht sepse ke kërkuar një fjalëkalim të ri.
-    © emrabebe.com, E info@emrabebe.com,
+    You are receiving this message automatically because you have requested a new password.
+    © emrabebe.com, E accounts@emrabebe.com,
     Impressum Datenschutz AGB
 </p>
 

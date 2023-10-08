@@ -15,7 +15,7 @@
     <br><br>
     <small>
         Mesazhi dërgohet automatikisht sepse ke kërkuar një fjalëkalim të ri.
-        © emrabebe.com, E info@emrabebe.com,
+        © emrabebe.com, E accounts@emrabebe.com,
         Impressum Datenschutz AGB
     </small>
 </div>

@@ -37,8 +37,9 @@ class SendVerificationEmail implements ShouldQueue
     public function handle()
     {
         try{
-//            $email = new EmailVerification($this->user);
-//            Mail::to($this->user->email)->send($email);
+           $email = new EmailVerification($this->user);
+
+           Mail::to($this->user->email)->send($email);
             if (!empty($this->locale)) {
                 if ($this->locale == 'en') {
                 $locale = 'emails.register_email_en';
@@ -58,8 +59,9 @@ class SendVerificationEmail implements ShouldQueue
             $to_email = $this->user->email;
             $data = array('name' => $this->user->name, 'email_token' => $this->user->verification_code);
                 Mail::send($locale, $data, function ($message) use ($to_email, $subject) {
-                    $message->from("info@emrabebe.com", 'EmraBebe.com');
+                    $message->from("noreplay@emrabebe.com", 'emrabebe.com');
                     $message->to($to_email)->subject($subject);
+                    return response()->json('email send', 201);
                 });
 
             if (Mail::failures()) {

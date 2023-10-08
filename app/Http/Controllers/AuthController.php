@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-//use App\Mail\verifyEmail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
@@ -31,7 +30,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json(null, 201);
+        return response()->json('Authenticated success', 201);
     }
 
     public function register(Request $request) {
@@ -52,20 +51,24 @@ class AuthController extends Controller
         $user = new User();
         $user->name = $request['name'];
         $user->email = $request['email'];
-        $user->password = bcrypt($request['password']); //$request['password'];
+        $user->password = $request['password']; // bcrypt($request['password']);
         $user->verification_code = base64_encode($request['email']);
         $user->locale = $request['locale'];
         $user->role = 'user';
+        dispatch(new SendVerificationEmail($user, $user->locale));
+
+        if (Mail::failures()) {
+            return response()->json([
+                'message' => 'Mail Server not working please try again latter',
+                'status_code' => 500
+            ], 500);
+        }
+
         $user->save();
-
-        $locale = $request['locale'];
-//        Mail::to($request['email'])->send(new verifyEmail($user));
-
-        dispatch(new SendVerificationEmail($user, $locale));
 
         event(new Registered($user));
 
-        return response()->json(null, 200);
+        return response()->json('Registerd!!', 200);
     }
 
     public function logout(Request $request) {
@@ -74,7 +77,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(null, 200);
+        return response()->json('Loged out', 200);
     }
 
     /**
@@ -87,12 +90,16 @@ class AuthController extends Controller
     public function verify(Request $request, $token)
     {
         $user = User::where('verification_code', $token)->first();
+
         if (!empty($user)) {
             $user->email_verified_at = now();
             if($user->save()){
                 $request->session()->regenerate();
                 $redirectHere = env('EMRA_BEBE_LOGIN');
-                return redirect($redirectHere . $user->locale .'/auth/login');
+                if($user->locale == 'en') {
+                    $user->locale = '';
+                }
+                return redirect($redirectHere . $user->locale .'/auth/Login');
             }
         }
     }
