@@ -9,6 +9,9 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Controller extends BaseController
 {
@@ -173,6 +176,30 @@ class Controller extends BaseController
     public function checkIfQueryIsNotSet($query) {
         if (!isset($query)) { return null; }
     }
+
+
+        /**
+     * Validate given data with given rules
+     *
+     * @param $data
+     * @param $rules
+     * @param bool $canBeEmpty (boolean) Flag to determine if empty $data should not be validated
+     * @param null $attributeNames which can be set in error messages
+     * @throws ValidationException
+     */
+    protected function validateData(&$data, $rules, $canBeEmpty = false) {
+        if(!isset($data) || !count($data)) {
+            if($canBeEmpty) { return; }
+            throw new HttpException(400, 'Error for validation! No data given for validation or parts are missing');
+        }
+
+        $validator = Validator::make($data, $rules);
+
+        if($validator->fails()) {
+            throw new ValidationException($validator, 422);
+        }
+    }
+    
 
 }
 
